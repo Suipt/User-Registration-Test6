@@ -13,6 +13,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Password is required"],
   },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  verifyToken: {
+    type: String,
+  },
 });
 
-exports.User = mongoose.model("User", userSchema);
+const User = mongoose.models.users || mongoose.model("users", userSchema);
+
+export default User;
