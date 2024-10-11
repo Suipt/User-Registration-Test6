@@ -1,22 +1,41 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useUserContext } from "../../contexts/user-context";
+import { useNavigate } from "react-router-dom";
+import { verifyCode } from "../../api";
 
 const Verify = () => {
+  const navigate = useNavigate();
   const { user, setUser } = useUserContext();
   const [code, setCode] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   console.log(user);
 
   console.log(code);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await verifyCode(user.email, code);
+    if (!res.success) {
+      setErrorMessage(res.message);
+    } else {
+      setUser({ ...user, isVerified: true });
+      navigate("/");
+    }
+  };
+
   return (
-    <form className=" flex flex-col p-8 bg-white shadow text-lg gap-6">
+    <form
+      className=" flex flex-col p-8 bg-white shadow text-lg gap-6"
+      onSubmit={handleSubmit}
+    >
       <h1 className="text-xl font-bold">Enter your verification code</h1>
       <div className="text-base">
         <p>We Sent a code to {user?.email}.</p>
         <p>Enter the code to continue.</p>
       </div>
+      <span className="text-red-600 w-80 capitalize">{errorMessage}</span>
       <input
         type="text"
         value={code}

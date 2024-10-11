@@ -9,9 +9,15 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // here will be some code
+    setUser({
+      name: "",
+      email: "",
+      password: "",
+      isAuthenticated: false,
+      isVerified: false,
+    });
 
-    navigate("/login");
+    navigate("/");
   };
 
   useEffect(() => {

@@ -82,5 +82,36 @@ userRouter.post("/register", async (req, res) => {
     res.status(500).json({ success: false, message: e.message });
   }
 });
+userRouter.post("/verify", async (req, res) => {
+  try {
+    const { email, code } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user)
+      return res.status(500).json({
+        success: false,
+        message: "this email is not registered",
+      });
+
+    const isMatch = await bcrypt.compare(code, user.verifyToken);
+
+    if (isMatch) {
+      user.isVerified = true;
+      user.save();
+
+      return res.json({
+        message: "user has been verified",
+        success: true,
+      });
+    } else
+      return res.status(500).json({
+        success: false,
+        message: "Invalid verification code",
+      });
+  } catch (e) {
+    res.status(500).json({ success: false, message: e.message });
+  }
+});
 
 export default userRouter;
