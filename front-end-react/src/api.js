@@ -1,4 +1,5 @@
-const API_BASE_URL = "http://localhost:80";
+const API_BASE_URL = process.env.REACT_APP_API_BASE;
+// const API_BASE_URL = "http://localhost:80";
 
 export const register = async (user) => {
   const res = await fetch(`${API_BASE_URL}/user/register`, {
