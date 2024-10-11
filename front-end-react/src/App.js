@@ -5,6 +5,7 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import Verify from "./pages/verify/Verify";
 import UserContextProvider from "./contexts/user-context";
+import IsLoadingContextProvider from "./contexts/isloading-context";
 
 const router = createBrowserRouter([
   {
@@ -27,10 +28,12 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <div className="flex justify-center w-full min-h-screen relative items-center items-start bg-sky-100">
+    <div className="flex justify-center w-full min-h-screen relative items-center items-start bg-sky-100 p-2">
       <Header />
       <UserContextProvider>
-        <RouterProvider router={router} />
+        <IsLoadingContextProvider>
+          <RouterProvider router={router} />
+        </IsLoadingContextProvider>
       </UserContextProvider>
     </div>
   );
