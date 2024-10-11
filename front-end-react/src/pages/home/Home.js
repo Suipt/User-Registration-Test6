@@ -1,6 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../../contexts/user-context";
+import { useEffect } from "react";
 
-export default () => {
+const Home = () => {
+  const { user, setUser } = useUserContext();
+  console.log(user);
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -9,9 +14,17 @@ export default () => {
     navigate("/login");
   };
 
+  useEffect(() => {
+    if (!user.isAuthenticated) {
+      navigate("/register");
+    } else if (!user.isVerified) {
+      navigate("/verify");
+    }
+  }, [user]);
+
   return (
     <div className=" flex flex-col gap-8 items-center">
-      <h1 className="text-3xl font-bold capitalize">welcome 'name'</h1>
+      <h1 className="text-3xl font-bold capitalize">welcome {user?.name}</h1>
       <button
         className="bg-blue-700 hover:bg-blue-800 text-white p-3 text-lg px-6"
         onClick={handleLogout}
@@ -21,3 +34,5 @@ export default () => {
     </div>
   );
 };
+
+export default Home;

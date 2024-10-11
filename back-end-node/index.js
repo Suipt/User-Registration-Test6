@@ -16,7 +16,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(morgan("tiny"));
 
-const { MONGODB_URI } = process.env;
+const { MONGODB_URI, PORT } = process.env;
 
 app.use("/user", userRouter);
 
@@ -28,4 +28,9 @@ connection.on("connected", () => {
 });
 connection.on("error", (err) => {
   console.log(`Connection error: ${err.message}`);
+});
+
+// starting the server
+app.listen(PORT, () => {
+  console.log(`server is running http://localhost:${PORT}`);
 });

@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useUserContext } from "../../contexts/user-context";
 
-export default () => {
-  const email = "example@gmail.com";
+const Verify = () => {
+  const { user, setUser } = useUserContext();
   const [code, setCode] = useState("");
+
+  console.log(user);
 
   console.log(code);
 
@@ -11,7 +14,7 @@ export default () => {
     <form className=" flex flex-col p-8 bg-white shadow text-lg gap-6">
       <h1 className="text-xl font-bold">Enter your verification code</h1>
       <div className="text-base">
-        <p>We Sent a code to {email}.</p>
+        <p>We Sent a code to {user?.email}.</p>
         <p>Enter the code to continue.</p>
       </div>
       <input
@@ -36,3 +39,5 @@ export default () => {
     </form>
   );
 };
+
+export default Verify;

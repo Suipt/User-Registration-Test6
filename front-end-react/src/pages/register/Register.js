@@ -1,24 +1,58 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { register } from "../../api";
+import { useUserContext } from "../../contexts/user-context";
 
-export default () => {
+const Register = () => {
+  const navigate = useNavigate();
+  const { user, setUser } = useUserContext();
   const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
     password: "",
   });
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setErrorMessage("");
     setUserInfo({ ...userInfo, [name]: value });
   };
 
-  console.log(userInfo);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // TODO: send the user info to the server
+    const res = await register(userInfo);
+    if (!res.success) {
+      setErrorMessage(res.message);
+      // show error
+      setUserInfo({
+        name: "",
+        email: "",
+        password: "",
+      });
+    } else {
+      setUser({
+        ...user,
+        name: res.user.name,
+        email: res.user.email,
+        isAuthenticated: true,
+        isVerified: false,
+      });
+      navigate("/");
+    }
+  };
+
+  // useEffect
 
   return (
-    <form className=" flex flex-col p-8 bg-white shadow text-lg gap-6">
+    <form
+      className=" flex flex-col p-8 bg-white shadow text-lg gap-6"
+      onSubmit={handleSubmit}
+    >
       <h1 className="text-2xl self-center">Register to the Application</h1>
       {/* <label htmlFor="email">email :</label> */}
+      <span className="text-red-600 w-80 capitalize">{errorMessage}</span>
       <input
         name="name"
         type="text"
@@ -48,7 +82,7 @@ export default () => {
         type="submit"
         className="uppercase bg-blue-700 p-3 text-white hover:bg-blue-800"
       >
-        login
+        Sign up
       </button>
       <p className="self-center">
         Registered?{" "}
@@ -59,3 +93,5 @@ export default () => {
     </form>
   );
 };
+
+export default Register;

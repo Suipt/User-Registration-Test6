@@ -4,3 +4,4 @@ front-end-react/node_modules
 back-end-node/node_modules
 
 back-end-node/.env
+front-end-react/.env
