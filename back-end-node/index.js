@@ -31,6 +31,7 @@ connection.on("error", (err) => {
 });
 
 // starting the server
-app.listen(PORT, () => {
-  console.log(`server is running http://localhost:${PORT}`);
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`server is running http://localhost:${port}`);
 });
