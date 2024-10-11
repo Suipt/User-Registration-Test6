@@ -25,3 +25,16 @@ export const verifyCode = async (email, code) => {
   const data = await res.json();
   return data;
 };
+
+export const login = async (email, password) => {
+  const res = await fetch(`${API_BASE_URL}/user/login`, {
+    method: "POST",
+    mode: "cors",
+    body: JSON.stringify({ email, password }),
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+    },
+  });
+  const data = await res.json();
+  return data;
+};

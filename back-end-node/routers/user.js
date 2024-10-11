@@ -113,5 +113,42 @@ userRouter.post("/verify", async (req, res) => {
     res.status(500).json({ success: false, message: e.message });
   }
 });
+userRouter.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user)
+      return res.status(500).json({
+        success: false,
+        message: "can't find this user, try to register",
+      });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (isMatch) {
+      user.isVerified = true;
+      user.save();
+
+      return res.json({
+        message: "loged in successfully",
+        success: true,
+        user: {
+          email: user.email,
+          name: user.name,
+          _id: user._id,
+          isVerified: user.isVerified,
+        },
+      });
+    } else
+      return res.status(500).json({
+        success: false,
+        message: "password is incorrect",
+      });
+  } catch (e) {
+    res.status(500).json({ success: false, message: e.message });
+  }
+});
 
 export default userRouter;

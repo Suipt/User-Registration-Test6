@@ -1,7 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../../api";
+import { useUserContext } from "../../contexts/user-context";
 
-export default () => {
+const Login = () => {
+  const [errorMessage, setErrorMessage] = useState("");
+  const { user, setUser } = useUserContext();
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
@@ -12,12 +17,42 @@ export default () => {
     setUserInfo({ ...userInfo, [name]: value });
   };
 
-  console.log(userInfo);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // call the login API
+    const res = await login(userInfo.email, userInfo.password);
+    if (!res.success) {
+      // show error message
+      setErrorMessage(res.message);
+      setUserInfo({
+        email: "",
+        password: "",
+      });
+    } else {
+      // navigate to the home page
+      setUser({
+        name: res.user.name,
+        email: res.user.email,
+        isAuthenticated: true,
+        isVerified: res.user.isVerified,
+      });
+      setUserInfo({
+        email: "",
+        password: "",
+      });
+      // navigate to the home page
+      navigate("/");
+    }
+  };
 
   return (
-    <form className=" flex flex-col p-8 bg-white shadow text-lg gap-6">
+    <form
+      className=" flex flex-col p-8 bg-white shadow text-lg gap-6"
+      onSubmit={handleSubmit}
+    >
       <h1 className="text-2xl self-center">Log in to the Application</h1>
       {/* <label htmlFor="email">email :</label> */}
+      <span className="text-red-600 w-80 capitalize">{errorMessage}</span>
       <input
         name="email"
         type="email"
@@ -50,3 +85,5 @@ export default () => {
     </form>
   );
 };
+
+export default Login;

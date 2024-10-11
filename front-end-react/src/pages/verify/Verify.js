@@ -10,10 +10,6 @@ const Verify = () => {
   const [code, setCode] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  console.log(user);
-
-  console.log(code);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await verifyCode(user.email, code);

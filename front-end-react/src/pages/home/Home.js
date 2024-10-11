@@ -4,7 +4,6 @@ import { useEffect } from "react";
 
 const Home = () => {
   const { user, setUser } = useUserContext();
-  console.log(user);
 
   const navigate = useNavigate();
 
